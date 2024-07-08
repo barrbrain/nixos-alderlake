@@ -17,23 +17,23 @@
     useXkbConfig = true; # use xkb.options in tty.
   };
 
-  # services.xserver.enable = true;
-  # services.xserver.xkb.layout = "us";
+  services.xserver.enable = true;
+  services.xserver.xkb.layout = "us";
 
-  # services.printing.enable = true;
+  services.printing.enable = true;
 
-  # services.pipewire = {
-  #   enable = true;
-  #   pulse.enable = true;
-  # };
+  services.pipewire = {
+    enable = true;
+    pulse.enable = true;
+  };
 
-  # services.libinput.enable = true;
+  services.libinput.enable = true;
 
   users.users.barrbrain = {
     isNormalUser = true;
     extraGroups = [ "wheel" ];
     packages = with pkgs; [
-      # git
+      git
     ];
   };
 
@@ -56,6 +56,16 @@
         "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
         "barrbrain-alderlake.cachix.org-1:r9gP8dmB5joRXT6L0303quClxuCUN6kh5zIPLpm6Gj8="
       ];
+    };
+  };
+
+  nixpkgs.config.packageOverrides = super: {
+    python3 = super.python3.override {
+      packageOverrides = python-self: python-super: {
+        numpy = python-super.numpy.overridePythonAttrs (oldAttrs: {
+          disabledTests = oldAttrs.disabledTests ++ ["test_validate_transcendentals"];
+        });
+      };
     };
   };
 }
