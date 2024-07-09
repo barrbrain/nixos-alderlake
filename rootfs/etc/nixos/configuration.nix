@@ -33,13 +33,14 @@
     isNormalUser = true;
     extraGroups = [ "wheel" ];
     packages = with pkgs; [
+      firefox
       git
     ];
   };
 
   environment.systemPackages = with pkgs; [
-    # curl
-    # nvim
+    curl
+    neovim
   ];
 
   networking.firewall.enable = false;

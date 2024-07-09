@@ -21,6 +21,9 @@
     gcc.tune = "alderlake";
     system = "x86_64-linux";
   };
+  nix.settings.system-features = [
+    "nixos-test" "benchmark" "big-parallel" "kvm" "gccarch-alderlake"
+  ];
 
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 }
