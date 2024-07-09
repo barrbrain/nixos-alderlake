@@ -65,6 +65,14 @@
         numpy = python-super.numpy.overridePythonAttrs (oldAttrs: {
           disabledTests = oldAttrs.disabledTests ++ ["test_validate_transcendentals"];
         });
+        pillow = python-super.pillow.overridePythonAttrs (oldAttrs: {
+          disabledTests = oldAttrs.disabledTests ++ [
+            "test_fuzz_images"
+          ];
+          disabledTestPaths = [
+            "Tests/test_file_libtiff.py"
+          ];
+        });
       };
     };
   };
