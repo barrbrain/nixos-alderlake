@@ -21,6 +21,8 @@ jobs:
         sudo mv nix.conf /etc/nix/nix.conf
         sudo systemctl restart nix-daemon.service
         chmod o+rx /home/runner
+    - name: Magic Nix Cache
+      uses: DeterminateSystems/magic-nix-cache-action@v7
     - uses: cachix/cachix-action@v14
       with:
         name: barrbrain-alderlake
