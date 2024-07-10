@@ -33,7 +33,7 @@
     isNormalUser = true;
     extraGroups = [ "wheel" ];
     packages = with pkgs; [
-      # firefox
+      firefox
       git
     ];
   };
