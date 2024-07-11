@@ -19,6 +19,12 @@
 
   services.xserver.enable = true;
   services.xserver.xkb.layout = "us";
+  services.displayManager.autoLogin.enable = true;
+  services.displayManager.autoLogin.user = "barrbrain";
+  services.displayManager.defaultSession = "plasma";
+  services.displayManager.sddm.enable = true;
+  services.displayManager.sddm.wayland.enable = true;
+  services.desktopManager.plasma6.enable = true;
 
   services.printing.enable = true;
 
@@ -29,19 +35,47 @@
 
   services.libinput.enable = true;
 
+  programs.direnv.enable = true;
+
+  virtualisation.docker.enable = true;
+  virtualisation.docker.storageDriver = "btrfs";
+
   users.users.barrbrain = {
     isNormalUser = true;
-    extraGroups = [ "wheel" ];
+    extraGroups = [
+      "wheel"
+      "docker"
+    ];
     packages = with pkgs; [
+      cargo
+      clang
+      ffmpeg
       # firefox
+      gcc
       git
+      mosh
+      rust-analyzer
     ];
   };
 
   environment.systemPackages = with pkgs; [
+    aha
+    clinfo
     curl
+    fwupd
+    glxinfo
+    jq
+    lshw
     neovim
+    pciutils
+    sof-firmware
+    vulkan-tools
+    wayland-utils
   ];
+  environment.variables = {
+    EDITOR = "nvim";
+    VISUAL = "nvim";
+  };
 
   networking.firewall.enable = false;
 
@@ -49,6 +83,10 @@
 
   nix = {
     settings = {
+      experimental-features = [
+        "flakes"
+        "nix-command"
+      ];
       substituters = [
         "https://cache.nixos.org"
         "https://barrbrain-alderlake.cachix.org"
@@ -74,6 +112,14 @@
             "Tests/test_file_libtiff.py"
           ];
         });
+      };
+    };
+    haskellPackages = super.haskellPackages.override {
+      overrides = hs-self: hs-super: {
+        crypton = pkgs.haskell.lib.dontCheck hs-super.crypton;
+        crypton-x509-validation = pkgs.haskell.lib.dontCheck hs-super.crypton-x509-validation;
+        cryptonite = pkgs.haskell.lib.dontCheck hs-super.cryptonite;
+        tls = pkgs.haskell.lib.dontCheck hs-super.tls;
       };
     };
   };
