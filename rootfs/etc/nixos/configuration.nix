@@ -19,6 +19,12 @@
 
   services.xserver.enable = true;
   services.xserver.xkb.layout = "us";
+  services.displayManager.autoLogin.enable = true;
+  services.displayManager.autoLogin.user = "barrbrain";
+  services.displayManager.defaultSession = "plasma";
+  services.displayManager.sddm.enable = true;
+  services.displayManager.sddm.wayland.enable = true;
+  services.desktopManager.plasma6.enable = true;
 
   services.printing.enable = true;
 
@@ -29,18 +35,33 @@
 
   services.libinput.enable = true;
 
+  programs.direnv.enable = true;
+
+  virtualisation.docker.enable = true;
+  virtualisation.docker.storageDriver = "btrfs";
+
   users.users.barrbrain = {
     isNormalUser = true;
-    extraGroups = [ "wheel" ];
+    extraGroups = [
+      "wheel"
+      "docker"
+    ];
     packages = with pkgs; [
+      cargo
+      clang
       # firefox
+      gcc
       git
+      rust-analyzer
     ];
   };
 
   environment.systemPackages = with pkgs; [
     curl
+    jq
+    lshw
     neovim
+    sof-firmware
   ];
 
   networking.firewall.enable = false;
@@ -49,6 +70,10 @@
 
   nix = {
     settings = {
+      experimental-features = [
+        "flakes"
+        "nix-command"
+      ];
       substituters = [
         "https://cache.nixos.org"
         "https://barrbrain-alderlake.cachix.org"
