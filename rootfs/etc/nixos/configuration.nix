@@ -86,7 +86,7 @@
   };
 
   nixpkgs.config.packageOverrides = super: {
-    openexr = super.openexr.override {
+    openexr = super.openexr.overrideAttrs {
       doCheck = false;
     };
     python3 = super.python3.override {
