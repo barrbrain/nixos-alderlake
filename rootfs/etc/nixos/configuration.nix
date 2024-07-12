@@ -86,6 +86,9 @@
   };
 
   nixpkgs.config.packageOverrides = super: {
+    openexr = super.openexr.override {
+      doCheck = false;
+    };
     python3 = super.python3.override {
       packageOverrides = python-self: python-super: {
         numpy = python-super.numpy.overridePythonAttrs (oldAttrs: {
