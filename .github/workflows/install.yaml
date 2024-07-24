@@ -1,7 +1,7 @@
 name: "NixOS Installation (alderlake)"
 on:
-  pull_request:
-  push:
+  schedule:
+    - cron: '0 */6 * * *'
 jobs:
   build:
     runs-on: ubuntu-latest
