@@ -17,7 +17,10 @@
     useXkbConfig = true; # use xkb.options in tty.
   };
 
+  # nixpkgs.config.allowUnfree = true;
+
   services.xserver.enable = true;
+  # services.xserver.videoDrivers = ["nvidia"];
   services.xserver.xkb.layout = "us";
   services.displayManager.autoLogin.enable = true;
   services.displayManager.autoLogin.user = "barrbrain";
@@ -34,6 +37,8 @@
   };
 
   services.libinput.enable = true;
+
+  services.fwupd.enable = true;
 
   programs.direnv.enable = true;
 

@@ -7,10 +7,19 @@
 
   boot.loader.timeout = 0;
   boot.initrd.availableKernelModules = [ "thunderbolt" ];
-  boot.initrd.kernelModules = [ ];
-  boot.kernelModules = [ "kvm-intel" ];
+  boot.initrd.kernelModules = [
+    "nvidia"
+    "nvidia_modeset"
+  ];
+  boot.kernelModules = [
+    "kvm-intel"
+    "nvidia_drm"
+  ];
+  boot.kernelParams = [
+    "quiet"
+  ];
   boot.extraModprobeConfig = ''
-    options i915          force_probe=7d55
+    options i915             force_probe=7d55
   '';
   boot.extraModulePackages = [ ];
 
@@ -18,10 +27,10 @@
     argsOverride = rec {
       src = pkgs.fetchurl {
             url = "mirror://kernel/linux/kernel/v6.x/linux-${version}.tar.xz";
-            sha256 = "10z6fjvpiv3l11rpsd6fgi7dr6a3d38c6zlp8ihffx6pjz1ch0c8";
+            sha256 = "1n6ckxx0i4dbq018b56q1wkwq944jhjy225swrpn65a9jfb848ck";
       };
-      version = "6.6.42";
-      modDirVersion = "6.6.42";
+      version = "6.6.44";
+      modDirVersion = "6.6.44";
       };
   });
 
