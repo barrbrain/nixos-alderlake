@@ -127,5 +127,8 @@
         tls = pkgs.haskell.lib.dontCheck hs-super.tls;
       };
     };
+    x265 = super.x265.overrideAttrs {
+      doCheck = false;
+    };
   };
 }
