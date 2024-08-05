@@ -130,5 +130,10 @@
     x265 = super.x265.overrideAttrs {
       doCheck = false;
     };
+    qt6Packages = super.qt6Packages.overrideScope(qt6-self: qt6-super: {
+      poppler = qt6-super.poppler.overrideAttrs {
+        doCheck = false;
+      };
+    });
   };
 }
