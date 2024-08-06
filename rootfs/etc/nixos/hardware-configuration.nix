@@ -43,12 +43,12 @@
   networking.useDHCP = lib.mkDefault true;
 
   nixpkgs.hostPlatform = {
-    gcc.arch = "alderlake";
+    gcc.arch = "x86-64-v3";
     gcc.tune = "alderlake";
     system = "x86_64-linux";
   };
   nix.settings.system-features = [
-    "nixos-test" "benchmark" "big-parallel" "kvm" "gccarch-alderlake"
+    "nixos-test" "benchmark" "big-parallel" "kvm" "gccarch-x86-64-v3"
   ];
 
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;

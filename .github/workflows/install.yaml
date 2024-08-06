@@ -19,7 +19,7 @@ jobs:
     - name: Configure nix-daemon
       run: |
         cp /etc/nix/nix.conf nix.conf
-        echo 'system-features = benchmark big-parallel kvm nixos-test uid-range gccarch-alderlake' |
+        echo 'system-features = benchmark big-parallel kvm nixos-test uid-range gccarch-x86-64-v3' |
           tee -a nix.conf
         sudo rm /etc/nix/nix.conf
         sudo mv nix.conf /etc/nix/nix.conf
