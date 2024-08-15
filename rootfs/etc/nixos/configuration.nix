@@ -17,10 +17,10 @@
     useXkbConfig = true; # use xkb.options in tty.
   };
 
-  # nixpkgs.config.allowUnfree = true;
+  nixpkgs.config.allowUnfree = true; # UNFREE
 
   services.xserver.enable = true;
-  # services.xserver.videoDrivers = ["nvidia"];
+  services.xserver.videoDrivers = ["nvidia"]; # UNFREE
   services.xserver.xkb.layout = "us";
   services.displayManager.autoLogin.enable = true;
   services.displayManager.autoLogin.user = "barrbrain";
@@ -41,6 +41,14 @@
   services.fwupd.enable = true;
 
   programs.direnv.enable = true;
+
+  services.openvpn.servers = {
+    global = {
+      config = '' config /root/nixos/openvpn/global.ovpn '';
+      updateResolvConf = true;
+    };
+  };
+  systemd.services.openvpn-global.wantedBy = lib.mkForce [];
 
   virtualisation.docker.enable = true;
   virtualisation.docker.storageDriver = "btrfs";

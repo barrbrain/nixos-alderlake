@@ -35,5 +35,16 @@ jobs:
         cachixArgs: '-j8 -c16'
     - name: Build NixOS
       run: |
-        nix-build --extra-substituters 'auto?trusted=1' '<nixpkgs/nixos>' -j 1 \
-          -k -A system -I nixos-config="$PWD/rootfs/etc/nixos/configuration.nix"
+        nix-build --extra-substituters 'auto?trusted=1' '<nixpkgs/nixos>' \
+          -A system -I nixos-config="$PWD/rootfs/etc/nixos/configuration.nix" \
+          --dry-run 2>&1 | tee unfree.log
+        sed -i '/UNFREE/d' rootfs/etc/nixos/configuration.nix
+        nix-build --extra-substituters 'auto?trusted=1' '<nixpkgs/nixos>' \
+          -A system -I nixos-config="$PWD/rootfs/etc/nixos/configuration.nix" \
+          --dry-run 2>&1 | tee free.log
+        echo 'Common derivations:'
+        grep -xFf unfree.log free.log | grep '/nix/store' | tr -d ' ' | tee common.log
+    - name: Build NixOS
+      run: |
+          nix-build --extra-substituters 'auto?trusted=1' -j 1 -k -A system \
+          -I nixos-config="$PWD/rootfs/etc/nixos/configuration.nix" `grep '\.drv$' common.log`
