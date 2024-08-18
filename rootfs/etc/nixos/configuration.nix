@@ -102,11 +102,11 @@
       ];
       substituters = [
         "https://cache.nixos.org"
-        "https://barrbrain-alderlake.cachix.org"
+        "http://nix.ba.rr-dav.id.au"
       ];
       trusted-public-keys = [
         "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
-        "barrbrain-alderlake.cachix.org-1:r9gP8dmB5joRXT6L0303quClxuCUN6kh5zIPLpm6Gj8="
+        "nix.ba-rr.dav.id.au:mN40uLqdT6zyCpfVSLl+wNZGNRrd5t/gEyJiL+tdgqc="
       ];
     };
   };

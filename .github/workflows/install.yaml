@@ -21,18 +21,23 @@ jobs:
         cp /etc/nix/nix.conf nix.conf
         echo 'system-features = benchmark big-parallel kvm nixos-test uid-range gccarch-x86-64-v3' |
           tee -a nix.conf
+        echo 'substituters = https://cache.nixos.org http://nix.ba.rr-dav.id.au' |
+          tee -a nix.conf
+        echo 'trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= nix.ba-rr.dav.id.au:mN40uLqdT6zyCpfVSLl+wNZGNRrd5t/gEyJiL+tdgqc=' |
+          tee -a nix.conf
+        echo '${{ secrets.AWS_SIGNING_KEY }}' |
+          sudo tee /etc/nix/key.private >/dev/null
+        echo 'secret-key-files = /etc/nix/key.private' |
+          tee -a nix.conf
+        sudo cp upload-to-cache.sh /etc/nix/upload-to-cache.sh
+        sudo sed -i 's#AWS_ACCESS_KEY_ID#&="${{ secrets.AWS_ACCESS_KEY_ID }}"#' /etc/nix/upload-to-cache.sh
+        sudo sed -i 's#AWS_SECRET_ACCESS_KEY#&="${{ secrets.AWS_SECRET_ACCESS_KEY }}"#' /etc/nix/upload-to-cache.sh
+        echo 'post-build-hook = /etc/nix/upload-to-cache.sh' |
+          tee -a nix.conf
         sudo rm /etc/nix/nix.conf
         sudo mv nix.conf /etc/nix/nix.conf
         sudo systemctl restart nix-daemon.service
         chmod o+rx /home/runner
-    - name: Magic Nix Cache
-      uses: DeterminateSystems/magic-nix-cache-action@v7
-    - uses: cachix/cachix-action@v14
-      with:
-        name: barrbrain-alderlake
-        signingKey: '${{ secrets.CACHIX_SIGNING_KEY }}'
-        authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
-        cachixArgs: '-j8 -c16'
     - name: Build NixOS
       run: |
         nix-build --extra-substituters 'auto?trusted=1' '<nixpkgs/nixos>' \
@@ -46,5 +51,6 @@ jobs:
         grep -xFf unfree.log free.log | grep '/nix/store' | tr -d ' ' | tee common.log
     - name: Build NixOS
       run: |
-          nix-build --extra-substituters 'auto?trusted=1' -j 1 -k -A system \
-          -I nixos-config="$PWD/rootfs/etc/nixos/configuration.nix" `grep '\.drv$' common.log`
+          nix-build --extra-substituters 'auto?trusted=1' -j 2 -k -A system -Q \
+            -I nixos-config="$PWD/rootfs/etc/nixos/configuration.nix" \
+            `grep '\.drv$' common.log`
