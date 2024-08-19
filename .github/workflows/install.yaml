@@ -38,6 +38,10 @@ jobs:
         sudo mv nix.conf /etc/nix/nix.conf
         sudo systemctl restart nix-daemon.service
         chmod o+rx /home/runner
+    - uses: dawidd6/action-download-artifact@v6
+      with:
+        workflow_conclusion: success
+        if_no_artifact_found: warn
     - name: Dry-build NixOS
       id: dry-build
       run: |
@@ -50,15 +54,22 @@ jobs:
           --dry-run 2>&1 | tee free.log
         grep -xFf unfree.log free.log | tr -d ' ' | grep '^/nix/store/.*\.drv$' > common.log
         COUNT=`wc -l < common.log`
-        echo 'Common derivations ($COUNT):'
+        echo "Common derivations ($COUNT):"
         cat common.log
+        if [ -f derivations/common.log ]
+        then grep -xvFf derivations/common.log common.log > new.log || true
+        else cp common.log new.log
+        fi
+        COUNT=`wc -l < new.log`
+        echo "New derivations ($COUNT):"
+        cat new.log
         echo "count=$COUNT" >> "$GITHUB_OUTPUT"
     - name: Build NixOS
       if: steps.dry-build.outputs.count > 0
       run: |
           nix-build --extra-substituters 'auto?trusted=1' -j 2 -k -A system -Q \
             -I nixos-config="$PWD/rootfs/etc/nixos/configuration.nix" \
-            `cat common.log`
+            `cat new.log`
     - uses: actions/upload-artifact@v4
       with:
         name: derivations
