@@ -38,7 +38,8 @@ jobs:
         sudo mv nix.conf /etc/nix/nix.conf
         sudo systemctl restart nix-daemon.service
         chmod o+rx /home/runner
-    - name: Build NixOS
+    - name: Dry-build NixOS
+      id: dry-build
       run: |
         nix-build --extra-substituters 'auto?trusted=1' '<nixpkgs/nixos>' \
           -A system -I nixos-config="$PWD/rootfs/etc/nixos/configuration.nix" \
@@ -47,10 +48,18 @@ jobs:
         nix-build --extra-substituters 'auto?trusted=1' '<nixpkgs/nixos>' \
           -A system -I nixos-config="$PWD/rootfs/etc/nixos/configuration.nix" \
           --dry-run 2>&1 | tee free.log
-        echo 'Common derivations:'
-        grep -xFf unfree.log free.log | grep '/nix/store' | tr -d ' ' | tee common.log
+        grep -xFf unfree.log free.log | tr -d ' ' | grep '^/nix/store/.*\.drv$' > common.log
+        COUNT=`wc -l < common.log`
+        echo 'Common derivations ($COUNT):'
+        cat common.log
+        echo "count=$COUNT" >> "$GITHUB_OUTPUT"
     - name: Build NixOS
+      if: steps.dry-build.outputs.count > 0
       run: |
           nix-build --extra-substituters 'auto?trusted=1' -j 2 -k -A system -Q \
             -I nixos-config="$PWD/rootfs/etc/nixos/configuration.nix" \
-            `grep '\.drv$' common.log`
+            `cat common.log`
+    - uses: actions/upload-artifact@v4
+      with:
+        name: derivations
+        path: common.log
