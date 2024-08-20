@@ -41,6 +41,7 @@ jobs:
     - name: Dry-build NixOS
       id: dry-build
       run: |
+        nix-channel --update
         nix-build --extra-substituters 'auto?trusted=1' '<nixpkgs/nixos>' \
           -A system -I nixos-config="$PWD/rootfs/etc/nixos/configuration.nix" \
           --dry-run 2>&1 | tee unfree.log
