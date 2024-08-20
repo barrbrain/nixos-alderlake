@@ -63,7 +63,7 @@
       cargo
       clang
       ffmpeg
-      # firefox
+      firefox
       gcc
       git
       mosh
