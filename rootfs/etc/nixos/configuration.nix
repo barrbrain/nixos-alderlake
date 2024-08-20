@@ -63,9 +63,11 @@
       cargo
       clang
       ffmpeg
+      file
       firefox
       gcc
       git
+      kdePackages.ktorrent
       mosh
       rust-analyzer
     ];
@@ -77,10 +79,12 @@
     curl
     fwupd
     glxinfo
+    htop
     jq
     lshw
     neovim
     pciutils
+    sbsigntool
     sof-firmware
     vulkan-tools
     wayland-utils
