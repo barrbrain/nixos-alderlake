@@ -42,6 +42,10 @@
 
   programs.direnv.enable = true;
 
+  nixpkgs.config.programs.ccache.cacheDir = "/nix/var/cache/ccache";
+  programs.ccache.enable = true;
+  programs.ccache.packageNames = [ "qtwebengine" ];
+
   services.openvpn.servers = {
     global = {
       config = '' config /root/nixos/openvpn/global.ovpn '';
@@ -147,5 +151,12 @@
         doCheck = false;
       };
     });
+    ccacheWrapper = super.ccacheWrapper.override {
+      extraConfig = ''
+        export CCACHE_COMPRESSLEVEL=8
+        export CCACHE_DIR="/nix/var/cache/ccache"
+        export CCACHE_UMASK=007
+	'';
+    };
   };
 }
