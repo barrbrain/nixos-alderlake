@@ -161,5 +161,11 @@
 	'';
     };
   };
-  nixpkgs.config.replaceStdenv = { pkgs }: pkgs.ccacheStdenv;
+  nixpkgs.config.replaceStdenv = { pkgs }: pkgs.ccacheStdenv.override {
+    extraConfig = ''
+      export CCACHE_COMPRESSLEVEL=8
+      export CCACHE_DIR="/nix/var/cache/ccache"
+      export CCACHE_UMASK=007
+      '';
+  };
 }
