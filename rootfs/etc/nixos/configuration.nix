@@ -44,7 +44,6 @@
 
   nixpkgs.config.programs.ccache.cacheDir = "/nix/var/cache/ccache";
   programs.ccache.enable = true;
-  programs.ccache.packageNames = [ "qtwebengine" ];
 
   services.openvpn.servers = {
     global = {
@@ -108,6 +107,9 @@
         "flakes"
         "nix-command"
       ];
+      extra-sandbox-paths = [
+        "/nix/var/cache/ccache"
+      ];
       substituters = [
         "https://cache.nixos.org"
         "http://nix.ba.rr-dav.id.au"
@@ -159,4 +161,5 @@
 	'';
     };
   };
+  nixpkgs.config.replaceStdenv = { pkgs }: pkgs.ccacheStdenv;
 }
