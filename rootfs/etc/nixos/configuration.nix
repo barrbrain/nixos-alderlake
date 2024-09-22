@@ -69,6 +69,7 @@
       git
       kdePackages.ktorrent
       mosh
+      nasm
       rust-analyzer
     ];
   };
@@ -80,6 +81,7 @@
     fwupd
     glxinfo
     htop
+    input-leap
     jq
     lshw
     neovim
