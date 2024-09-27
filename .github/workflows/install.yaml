@@ -61,8 +61,6 @@ jobs:
     - name: Free Disk Space (Ubuntu)
       if: steps.dry-build.outputs.count > 0
       uses: jlumbroso/free-disk-space@v1.3.1
-      with:
-        large-packages: false
     - name: Build NixOS
       if: steps.dry-build.outputs.count > 0
       run: |
