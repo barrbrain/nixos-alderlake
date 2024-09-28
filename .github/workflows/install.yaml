@@ -64,7 +64,7 @@ jobs:
     - name: Build NixOS
       if: steps.dry-build.outputs.count > 0
       run: |
-          nix-build --extra-substituters 'auto?trusted=1' -j 2 -k -A system -Q \
+          nix-build --extra-substituters 'auto?trusted=1' -j 1 -k -A system -Q \
             -I nixos-config="$PWD/rootfs/etc/nixos/configuration.nix" \
             `cat new.log`
     - uses: actions/upload-artifact@v4
