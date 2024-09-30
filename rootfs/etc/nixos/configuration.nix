@@ -123,31 +123,12 @@
         numpy = python-super.numpy.overridePythonAttrs (oldAttrs: {
           disabledTests = oldAttrs.disabledTests ++ ["test_validate_transcendentals"];
         });
-        pillow = python-super.pillow.overridePythonAttrs (oldAttrs: {
-          disabledTests = oldAttrs.disabledTests ++ [
-            "test_fuzz_images"
-          ];
-          disabledTestPaths = [
-            "Tests/test_file_libtiff.py"
-          ];
-        });
       };
     };
     haskellPackages = super.haskellPackages.override {
       overrides = hs-self: hs-super: {
-        crypton = pkgs.haskell.lib.dontCheck hs-super.crypton;
         crypton-x509-validation = pkgs.haskell.lib.dontCheck hs-super.crypton-x509-validation;
-        cryptonite = pkgs.haskell.lib.dontCheck hs-super.cryptonite;
-        tls = pkgs.haskell.lib.dontCheck hs-super.tls;
       };
     };
-    x265 = super.x265.overrideAttrs {
-      doCheck = false;
-    };
-    qt6Packages = super.qt6Packages.overrideScope(qt6-self: qt6-super: {
-      poppler = qt6-super.poppler.overrideAttrs {
-        doCheck = false;
-      };
-    });
   };
 }
