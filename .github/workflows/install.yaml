@@ -1,9 +1,15 @@
 name: "NixOS Installation (alderlake)"
 on:
   workflow_dispatch:
+  workflow_run:
+    workflows:
+      - NixOS KDE backport
+    types:
+      - completed
 jobs:
   build:
     runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
     steps:
     - run: cat /proc/cpuinfo
     - uses: actions/checkout@v4
