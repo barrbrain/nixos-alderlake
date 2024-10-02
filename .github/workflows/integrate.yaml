@@ -1,0 +1,57 @@
+name: "NixOS KDE backport"
+on:
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+    - name: git fetch --depth=1 origin nixos-unstable
+      uses: actions/checkout@v4
+      with:
+        path: 'nixpkgs'
+        repository: 'barrbrain/nixpkgs'
+        ref: 'refs/heads/nixos-unstable'
+    - name: git fetch --depth=1 origin nixos-24.05
+      uses: actions/checkout@v4
+      with:
+        clean: false
+        path: 'nixpkgs'
+        repository: 'barrbrain/nixpkgs'
+        ref: 'refs/heads/nixos-24.05'
+    - name: git fetch --depth=1 upstream nixos-24.05
+      working-directory: ./nixpkgs
+      run: |
+        git fetch --depth=1 https://github.com/NixOS/nixpkgs nixos-24.05
+        git checkout -B nixos-24.05 FETCH_HEAD
+    - name: Check for new commits
+      working-directory: ./nixpkgs
+      run: |
+        [ `git rev-parse HEAD` != `git rev-parse origin/nixos-24.05` ]
+    - run: git -C nixpkgs fetch origin nixos-24.05-kde
+    - name: Re-apply merge
+      env:
+        GIT_COMMITTER_NAME: David Michael Barr
+        GIT_COMMITTER_EMAIL: b@rr-dav.id.au
+      working-directory: ./nixpkgs
+      run: |
+        git checkout -B nixos-24.05-kde nixos-24.05
+        git rm -fqr maintainers/scripts/kde pkgs/applications/kde \
+          pkgs/development/libraries/plasma-wayland-protocols pkgs/kde
+        git checkout origin/nixos-unstable maintainers/scripts/kde \
+          pkgs/applications/kde pkgs/by-name/li/libetebase \
+          pkgs/development/libraries/plasma-wayland-protocols pkgs/kde
+        MERGE_REV=`git rev-list origin/nixos-24.05-kde --merges`
+        git rev-parse origin/nixos-unstable > .git/MERGE_HEAD
+        touch .git/MERGE_MODE
+        git commit -C $MERGE_REV
+        git cherry-pick $MERGE_REV..origin/nixos-24.05-kde
+    - run: git -C nixpkgs log --pretty=fuller
+    - name: Upload new merge results
+      working-directory: ./nixpkgs
+      run: |
+        git config --local --unset-all 'http.https://github.com/.extraheader'
+        git config --local 'http.https://github.com/.extraheader' \
+          'Authorization: Basic ${{ secrets.NIXPKGS_REPO_TOKEN }}'
+        git push origin +nixos-24.05 +nixos-24.05-kde
