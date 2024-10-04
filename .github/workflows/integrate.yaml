@@ -48,7 +48,7 @@ jobs:
         git rev-parse origin/nixos-unstable > .git/MERGE_HEAD
         touch .git/MERGE_MODE
         git commit -C $MERGE_REV
-        git cherry-pick $MERGE_REV..origin/nixos-24.05-kde
+        git cherry-pick --empty=drop $MERGE_REV..origin/nixos-24.05-kde
     - run: git -C nixpkgs log --pretty=fuller
     - name: Upload new merge results
       working-directory: ./nixpkgs
