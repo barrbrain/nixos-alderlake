@@ -60,6 +60,7 @@
       "docker"
     ];
     packages = with pkgs; [
+      appimage-run
       cargo
       clang
       ffmpeg
