@@ -85,10 +85,12 @@
     input-leap
     jq
     lshw
+    minicom
     neovim
     pciutils
     sbsigntool
     sof-firmware
+    usbutils
     vulkan-tools
     wayland-utils
   ];
