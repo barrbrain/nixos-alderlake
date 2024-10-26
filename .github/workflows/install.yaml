@@ -73,6 +73,9 @@ jobs:
           nix-build --extra-substituters 'auto?trusted=1' -j 1 -k -A system -Q \
             -I nixos-config="$PWD/rootfs/etc/nixos/configuration.nix" \
             `cat new.log`
+    - name: Build seaborn shell
+      if: steps.dry-build.outputs.count > 0
+      run: nix-shell seaborn.nix --run true
     - uses: actions/upload-artifact@v4
       with:
         name: derivations
