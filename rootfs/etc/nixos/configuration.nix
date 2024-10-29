@@ -102,6 +102,26 @@
     usbutils
     vulkan-tools
     wayland-utils
+    (let
+      my-python-packages = python-packages: with python-packages; [
+        seaborn
+        statsmodels
+      ];
+      python3Optimized = pkgs.python3.override {
+        enableLTO = true;
+        enableOptimizations = true;
+        reproducibleBuild = false;
+        self = python3Optimized;
+      };
+      python-with-my-packages = python3Optimized.withPackages my-python-packages;
+    in pkgs.runCommand "python-seaborn" {
+      buildInputs = [ python-with-my-packages ];
+      nativeBuildInputs = [ pkgs.makeWrapper ];
+    } ''
+      mkdir -p $out/bin/
+      ln -s ${python-with-my-packages}/bin/python $out/bin/python-seaborn
+      wrapProgram $out/bin/python-seaborn --prefix PATH : ${pkgs.lib.makeBinPath [ python-with-my-packages ]}
+    '')
   ];
   environment.variables = {
     EDITOR = "nvim";
