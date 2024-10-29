@@ -17,6 +17,13 @@
     useXkbConfig = true; # use xkb.options in tty.
   };
 
+  fonts.packages = with pkgs; [
+    noto-fonts
+    noto-fonts-cjk
+    noto-fonts-emoji
+    iosevka
+  ];
+
   nixpkgs.config.allowUnfree = true; # UNFREE
 
   services.xserver.enable = true;
