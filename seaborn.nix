@@ -28,7 +28,13 @@ let
     seaborn
     statsmodels
   ];
-  python-with-my-packages = python3.withPackages my-python-packages;
+  python3Optimized = pkgs.python3.override {
+    enableLTO = true;
+    enableOptimizations = true;
+    reproducibleBuild = false;
+    self = python3Optimized;
+  };
+  python-with-my-packages = python3Optimized.withPackages my-python-packages;
 in
 mkShell {
   buildInputs = [
