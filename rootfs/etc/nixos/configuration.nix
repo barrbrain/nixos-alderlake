@@ -36,6 +36,8 @@
     pulse.enable = true;
   };
 
+  services.openssh.enable = true;
+
   services.libinput.enable = true;
 
   services.fwupd.enable = true;
