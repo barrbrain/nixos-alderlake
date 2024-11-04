@@ -31,24 +31,24 @@ jobs:
       working-directory: ./nixpkgs
       run: |
         [ `git rev-parse HEAD` != `git rev-parse origin/nixos-24.05` ]
-    - run: git -C nixpkgs fetch origin nixos-24.05-kde
+    - run: git -C nixpkgs fetch origin nixos-24.05-plasma-6.2.1.1
     - name: Re-apply merge
       env:
         GIT_COMMITTER_NAME: David Michael Barr
         GIT_COMMITTER_EMAIL: b@rr-dav.id.au
       working-directory: ./nixpkgs
       run: |
-        git checkout -B nixos-24.05-kde nixos-24.05
+        git checkout -B nixos-24.05-plasma-6.2.1.1 nixos-24.05
         git rm -fqr maintainers/scripts/kde pkgs/applications/kde \
           pkgs/development/libraries/plasma-wayland-protocols pkgs/kde
         git checkout origin/nixos-unstable maintainers/scripts/kde \
           pkgs/applications/kde pkgs/by-name/li/libetebase \
           pkgs/development/libraries/plasma-wayland-protocols pkgs/kde
-        MERGE_REV=`git rev-list origin/nixos-24.05-kde --merges`
+        MERGE_REV=`git rev-list origin/nixos-24.05-plasma-6.2.1.1 --merges`
         git rev-parse origin/nixos-unstable > .git/MERGE_HEAD
         touch .git/MERGE_MODE
         git commit -C $MERGE_REV
-        git cherry-pick --empty=drop $MERGE_REV..origin/nixos-24.05-kde
+        git cherry-pick --empty=drop $MERGE_REV..origin/nixos-24.05-plasma-6.2.1.1
     - run: git -C nixpkgs log --pretty=fuller
     - name: Upload new merge results
       working-directory: ./nixpkgs
@@ -56,4 +56,4 @@ jobs:
         git config --local --unset-all 'http.https://github.com/.extraheader'
         git config --local 'http.https://github.com/.extraheader' \
           'Authorization: Basic ${{ secrets.NIXPKGS_REPO_TOKEN }}'
-        git push origin +nixos-24.05 +nixos-24.05-kde
+        git push origin +nixos-24.05 +nixos-24.05-plasma-6.2.1.1
