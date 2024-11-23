@@ -70,6 +70,7 @@
     ];
     packages = with pkgs; [
       appimage-run
+      b3sum
       cargo
       clang
       ffmpeg
@@ -77,9 +78,12 @@
       firefox
       gcc
       git
+      google-cloud-sdk
       kdePackages.ktorrent
       mosh
       nasm
+      pigz
+      pixz
       rust-analyzer
     ];
   };
