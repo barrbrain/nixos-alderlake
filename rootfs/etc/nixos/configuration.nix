@@ -70,6 +70,8 @@
     ];
     packages = with pkgs; [
       appimage-run
+      bc
+      binaryen
       cargo
       clang
       ffmpeg
@@ -81,6 +83,8 @@
       mosh
       nasm
       rust-analyzer
+      wabt
+      webpack
     ];
   };
 
