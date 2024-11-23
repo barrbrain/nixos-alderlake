@@ -71,6 +71,8 @@
     packages = with pkgs; [
       appimage-run
       b3sum
+      bc
+      binaryen
       cargo
       clang
       ffmpeg
@@ -85,6 +87,8 @@
       pigz
       pixz
       rust-analyzer
+      wabt
+      nodePackages.webpack-cli
     ];
   };
 
