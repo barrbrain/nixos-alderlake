@@ -76,6 +76,7 @@
       cargo
       clang
       config.boot.kernelPackages.perf
+      falkon
       ffmpeg
       file
       firefox
