@@ -19,7 +19,7 @@
 
   fonts.packages = with pkgs; [
     noto-fonts
-    noto-fonts-cjk
+    noto-fonts-cjk-sans
     noto-fonts-emoji
     iosevka
   ];
@@ -75,6 +75,7 @@
       binaryen
       cargo
       clang
+      config.boot.kernelPackages.perf
       ffmpeg
       file
       firefox
@@ -154,21 +155,6 @@
         "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
         "nix.ba-rr.dav.id.au:mN40uLqdT6zyCpfVSLl+wNZGNRrd5t/gEyJiL+tdgqc="
       ];
-    };
-  };
-
-  nixpkgs.config.packageOverrides = super: {
-    python3 = super.python3.override {
-      packageOverrides = python-self: python-super: {
-        numpy = python-super.numpy.overridePythonAttrs (oldAttrs: {
-          disabledTests = oldAttrs.disabledTests ++ ["test_validate_transcendentals"];
-        });
-      };
-    };
-    haskellPackages = super.haskellPackages.override {
-      overrides = hs-self: hs-super: {
-        crypton-x509-validation = pkgs.haskell.lib.dontCheck hs-super.crypton-x509-validation;
-      };
     };
   };
 }
