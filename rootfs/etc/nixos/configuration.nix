@@ -82,6 +82,7 @@
       gcc
       git
       google-cloud-sdk
+      kdePackages.falkon
       kdePackages.ktorrent
       mosh
       nasm
