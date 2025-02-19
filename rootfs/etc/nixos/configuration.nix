@@ -50,14 +50,8 @@
   services.fwupd.enable = true;
 
   programs.direnv.enable = true;
-
-  services.openvpn.servers = {
-    global = {
-      config = '' config /root/nixos/openvpn/global.ovpn '';
-      updateResolvConf = true;
-    };
-  };
-  systemd.services.openvpn-global.wantedBy = lib.mkForce [];
+  programs.firefox.enable = true; # UNFREE
+  programs.firefox.package = pkgs.firefox-bin; # UNFREE
 
   virtualisation.docker.enable = true;
   virtualisation.docker.storageDriver = "btrfs";
@@ -78,12 +72,12 @@
       config.boot.kernelPackages.perf
       ffmpeg
       file
-      firefox
       gcc
       git
       google-cloud-sdk
       kdePackages.falkon
       kdePackages.ktorrent
+      lapce
       mosh
       nasm
       pigz
