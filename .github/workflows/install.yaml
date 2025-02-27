@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
   workflow_run:
     workflows:
-      - NixOS KDE backport
+      - NixOS patches
     types:
       - completed
 jobs:
