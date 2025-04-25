@@ -49,6 +49,9 @@
 
   services.fwupd.enable = true;
 
+  services.envfs.enable = true;
+  programs.nix-ld.enable = true;
+
   programs.direnv.enable = true;
   programs.firefox.enable = true; # UNFREE
   programs.firefox.package = pkgs.firefox-bin; # UNFREE
