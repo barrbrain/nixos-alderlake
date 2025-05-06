@@ -64,6 +64,10 @@ jobs:
         echo "New derivations ($COUNT):"
         cat new.log
         echo "count=$COUNT" >> "$GITHUB_OUTPUT"
+    - uses: actions/upload-artifact@v4
+      with:
+        name: derivations
+        path: common.log
     - name: Free Disk Space (Ubuntu)
       if: steps.dry-build.outputs.count > 0
       uses: jlumbroso/free-disk-space@v1.3.1
@@ -73,7 +77,3 @@ jobs:
           nix-build --extra-substituters 'auto?trusted=1' -j 1 -k -A system -Q \
             -I nixos-config="$PWD/rootfs/etc/nixos/configuration.nix" \
             `cat new.log`
-    - uses: actions/upload-artifact@v4
-      with:
-        name: derivations
-        path: common.log
