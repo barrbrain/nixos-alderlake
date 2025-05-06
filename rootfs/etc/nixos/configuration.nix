@@ -18,10 +18,15 @@
   };
 
   fonts.packages = with pkgs; [
+    stix-two
+    iosevka
+    sarasa-gothic
+    source-han-mono
+    source-han-sans-korean
+    source-han-serif-korean
     noto-fonts
     noto-fonts-cjk-sans
     noto-fonts-emoji
-    iosevka
   ];
 
   nixpkgs.config.allowUnfree = true; # UNFREE
