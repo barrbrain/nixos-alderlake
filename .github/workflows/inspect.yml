@@ -1,0 +1,33 @@
+name: "Workflow management"
+on:
+  workflow_dispatch:
+  workflow_run:
+    workflows:
+      - NixOS patches
+    types:
+      - completed
+jobs:
+  delete_runs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete skipped workflow runs
+        uses: dmvict/clean-workflow-runs@v1.2.2
+        with:
+          token: ${{ secrets.NIXOS_ALDERLAKE_WORKFLOW_TOKEN }}
+          run_conclusions: skipped
+          save_period: 7
+          save_min_runs_number: 0
+      - name: Delete old workflow runs
+        uses: dmvict/clean-workflow-runs@v1.2.2
+        with:
+          token: ${{ secrets.NIXOS_ALDERLAKE_WORKFLOW_TOKEN }}
+          save_period: 90
+          save_min_runs_number: 0
+      - name: Delete workflow management runs
+        uses: dmvict/clean-workflow-runs@v1.2.2
+        with:
+          token: ${{ secrets.NIXOS_ALDERLAKE_WORKFLOW_TOKEN }}
+          workflow_id: inspect.yml
+          run_conclusions: success
+          save_period: 1
+          save_min_runs_number: 0
