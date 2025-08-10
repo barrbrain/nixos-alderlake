@@ -4,7 +4,11 @@
   imports = [ ./hardware-configuration.nix ];
 
   boot.loader.systemd-boot.enable = true;
+  boot.loader.systemd-boot.consoleMode = "auto";
+  boot.loader.systemd-boot.xbootldrMountPoint = "/boot";
+
   boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader.efi.efiSysMountPoint = "/efi";
 
   networking.hostName = "battleship";
   networking.networkmanager.enable = true;
@@ -13,6 +17,7 @@
 
   i18n.defaultLocale = "en_US.UTF-8";
   console = {
+    earlySetup = true;
     font = "Lat2-Terminus16";
     useXkbConfig = true; # use xkb.options in tty.
   };
@@ -61,6 +66,8 @@
   programs.firefox.enable = true; # UNFREE
   programs.firefox.package = pkgs.firefox-bin; # UNFREE
 
+  systemd.services.systemd-vconsole-setup.unitConfig.After = "local-fs.target";
+
   virtualisation.docker.enable = true;
   virtualisation.docker.storageDriver = "btrfs";
 
@@ -83,7 +90,7 @@
       gcc
       git
       google-cloud-sdk
-      kdePackages.falkon
+      # kdePackages.falkon
       kdePackages.ktorrent
       lapce
       mosh
@@ -109,6 +116,7 @@
     minicom
     neovim
     pciutils
+    sbctl
     sbsigntool
     sof-firmware
     usbutils

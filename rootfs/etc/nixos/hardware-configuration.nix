@@ -5,16 +5,17 @@
     [ (modulesPath + "/installer/scan/not-detected.nix")
     ];
 
-  boot.kernelPackages = pkgs.linuxPackages_latest;
   boot.loader.timeout = 0;
+  boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.initrd.systemd.enable = true;
   boot.initrd.availableKernelModules = [ "thunderbolt" ];
   boot.initrd.kernelModules = [
     "nvidia"
-    "nvidia_modeset"
+    "nvidia-modeset"
+    "nvidia-drm"
   ];
   boot.kernelModules = [
     "kvm-intel"
-    "nvidia_drm"
   ];
   boot.kernelParams = [
     "quiet"
@@ -42,6 +43,13 @@
     "nixos-test" "benchmark" "big-parallel" "kvm" "gccarch-x86-64-v3"
   ];
 
+  hardware.bluetooth.enable = true;
+  hardware.bluetooth.powerOnBoot = true;
+  hardware.bluetooth.settings = {
+    General = {
+      Enable = "Source,Sink,Media,Socket";
+    };
+  };
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
   hardware.graphics.enable = true;
   hardware.nvidia = {
