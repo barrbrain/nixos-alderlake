@@ -108,11 +108,11 @@
     clinfo
     curl
     fwupd
-    glxinfo
     htop
     input-leap
     jq
     lshw
+    mesa-demos
     minicom
     neovim
     pciutils
