@@ -27,8 +27,8 @@
     iosevka
     sarasa-gothic
     source-han-mono
-    source-han-sans-korean
-    source-han-serif-korean
+    source-han-sans
+    source-han-serif
     noto-fonts
     noto-fonts-cjk-sans
     noto-fonts-emoji
