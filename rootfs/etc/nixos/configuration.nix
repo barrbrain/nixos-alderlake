@@ -24,7 +24,6 @@
 
   fonts.packages = with pkgs; [
     stix-two
-    iosevka
     sarasa-gothic
     source-han-mono
     source-han-sans
@@ -84,7 +83,7 @@
       binaryen
       cargo
       clang
-      config.boot.kernelPackages.perf
+      cloc
       ffmpeg
       file
       gcc
@@ -92,14 +91,27 @@
       google-cloud-sdk
       # kdePackages.falkon
       kdePackages.ktorrent
+      kdiff3
+      kubectl
+      kubelogin-oidc
       lapce
       mosh
       nasm
+      perf
       pigz
       pixz
       rust-analyzer
+      valgrind
       wabt
       nodePackages.webpack-cli
+      (wrapHelm kubernetes-helm {
+        plugins = with pkgs.kubernetes-helmPlugins; [
+          helm-secrets
+          helm-diff
+          helm-s3
+          helm-git
+        ];
+      })
     ];
   };
 
@@ -151,6 +163,20 @@
   networking.firewall.enable = false;
 
   system.stateVersion = "24.05";
+
+  nixpkgs.overlays = [
+    (self: super: {
+      assimp = super.assimp.overrideAttrs (oldAttrs: {
+        doCheck = false;
+      });
+      ffmpeg = super.ffmpeg.overrideAttrs (oldAttrs: {
+        doCheck = false;
+      });
+      ffmpeg-headless = super.ffmpeg-headless.overrideAttrs (oldAttrs: {
+        doCheck = false;
+      });
+    })
+  ];
 
   nix = {
     settings = {
