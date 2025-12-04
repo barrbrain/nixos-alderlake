@@ -70,6 +70,10 @@
   virtualisation.docker.enable = true;
   virtualisation.docker.storageDriver = "btrfs";
 
+  xdg.portal.extraPortals = lib.mkForce [
+    pkgs.kdePackages.xdg-desktop-portal-kde
+  ];
+
   users.users.barrbrain = {
     isNormalUser = true;
     extraGroups = [
