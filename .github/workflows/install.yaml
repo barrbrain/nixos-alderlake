@@ -34,6 +34,8 @@ jobs:
         sudo sed -i 's#AWS_SECRET_ACCESS_KEY#&="${{ secrets.AWS_SECRET_ACCESS_KEY }}"#' /etc/nix/upload-to-cache.sh
         echo 'post-build-hook = /etc/nix/upload-to-cache.sh' |
           tee -a nix.conf
+        echo 'require-sigs = false' |
+          tee -a nix.conf
         sudo rm /etc/nix/nix.conf
         sudo mv nix.conf /etc/nix/nix.conf
         sudo systemctl restart nix-daemon.service
